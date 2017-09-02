@@ -1,5 +1,6 @@
+# Add our new class for MariaDB
 class mariadb (
-	$path   = '/vagrant/extensions/mariadb',
+	$path = '/vagrant/extensions/mariadb',
 ) {
 
 	apt::source { 'mariadb':
@@ -10,9 +11,9 @@ class mariadb (
 			id     => '177F4010FE56CA3336300305F1656F24C74CD1D8',
 			server => 'hkp://keyserver.ubuntu.com:80',
 		},
-		include => {
-			src   => false,
-			deb   => true,
+		include  => {
+			src => false,
+			deb => true,
 		},
 	}
 	class { '::mysql::server':
@@ -21,7 +22,7 @@ class mariadb (
 		service_name     => 'mysql',
 		root_password    => 'password',
 		override_options => {
-			mysqld => {
+			mysqld      => {
 				'log-error' => '/var/log/mysql/mariadb.log',
 				'pid-file'  => '/var/run/mysqld/mysqld.pid',
 			},
@@ -31,7 +32,5 @@ class mariadb (
 		}
 	}
 
-	Apt::Source['mariadb'] ~>
-	Class['apt::update'] ->
-	Class['::mysql::server']
+	Apt::Source['mariadb'] ~> Class['apt::update'] -> Class['::mysql::server']
 }
