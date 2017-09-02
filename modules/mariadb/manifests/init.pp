@@ -21,7 +21,7 @@ class mariadb (
 		package_name     => 'mariadb-server',
 		package_ensure   => 'latest',
 		service_name     => 'mysql',
-		root_password    => 'password',
+		root_password    => $config['database']['password'],
 		override_options => {
 			mysqld      => {
 				'log-error' => '/var/log/mysql/mariadb.log',
