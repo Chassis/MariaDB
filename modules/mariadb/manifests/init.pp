@@ -1,6 +1,7 @@
 # Add our new class for MariaDB
 class mariadb (
-	$path = '/vagrant/extensions/mariadb',
+	$path   = '/vagrant/extensions/mariadb',
+	$config = sz_load_config()
 ) {
 
 	apt::source { 'mariadb':
