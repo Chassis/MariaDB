@@ -1,5 +1,5 @@
 # A MariaDB extension for Chassis
-The MariaDB extension automatically sets up your Chassis instance to be able to use MariaDB.
+The MariaDB extension automatically sets up your Chassis instance to to use MariaDB.
 
 ## Activation
 Ensure you have a Chassis instance set up locally already.
