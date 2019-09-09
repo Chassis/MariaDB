@@ -4,8 +4,10 @@ class mariadb (
 	$config = sz_load_config()
 ) {
 
+	include apt
+
 	apt::source { 'mariadb':
-		location => 'http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.2/ubuntu',
+		location => 'http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.4/ubuntu/',
 		release  => $::lsbdistcodename,
 		repos    => 'main',
 		key      => {
@@ -17,21 +19,28 @@ class mariadb (
 			deb => true,
 		},
 	}
-	class { '::mysql::server':
-		package_name     => 'mariadb-server',
-		package_ensure   => 'latest',
-		service_name     => 'mysql',
-		root_password    => $config['database']['password'],
-		override_options => {
-			mysqld      => {
-				'log-error' => '/var/log/mysql/mariadb.log',
-				'pid-file'  => '/var/run/mysqld/mysqld.pid',
-			},
-			mysqld_safe => {
-				'log-error' => '/var/log/mysql/mariadb.log',
+
+	class mysql_mariadb inherits mysql {
+		Class['mysql::server'] {
+			package_name     => 'mariadb-server',
+			package_ensure   => 'latest',
+			service_name     => 'mysql',
+			root_password    => $config['database']['password'],
+			bindings_enable  => true,
+			override_options => {
+				mysqld      => {
+					'log-error' => '/var/log/mysql/mariadb.log',
+					'pid-file'  => '/var/run/mysqld/mysqld.pid',
+				},
+				mysqld_safe => {
+					'log-error' => '/var/log/mysql/mariadb.log',
+				},
 			},
 		}
 	}
 
-	Apt::Source['mariadb'] ~> Class['apt::update'] -> Class['::mysql::server']
+	package { 'mariadb-server':
+		ensure  => installed,
+		require => [ Apt::Source['mariadb'], Class['mysql::server'] ]
+	}
 }
