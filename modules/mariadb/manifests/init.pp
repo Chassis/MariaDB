@@ -20,27 +20,28 @@ class mariadb (
 		},
 	}
 
-	class mysql_mariadb inherits mysql {
-		Class['mysql::server'] {
-			package_name     => 'mariadb-server',
-			package_ensure   => 'latest',
-			service_name     => 'mysql',
-			root_password    => $config['database']['password'],
-			bindings_enable  => true,
-			override_options => {
-				mysqld      => {
-					'log-error' => '/var/log/mysql/mariadb.log',
-					'pid-file'  => '/var/run/mysqld/mysqld.pid',
-				},
-				mysqld_safe => {
-					'log-error' => '/var/log/mysql/mariadb.log',
-				},
-			},
-		}
-	}
-
 	package { 'mariadb-server':
 		ensure  => installed,
 		require => [ Apt::Source['mariadb'], Class['mysql::server'] ]
+	}
+}
+
+# Inherit the MySQL class and adjust it for MariaDB.
+class mysql::mariadb inherits mysql {
+	Class['mysql::server'] {
+		package_name     => 'mariadb-server',
+		package_ensure   => 'latest',
+		service_name     => 'mysql',
+		root_password    => $config['database']['password'],
+		bindings_enable  => true,
+		override_options => {
+			mysqld      => {
+				'log-error' => '/var/log/mysql/mariadb.log',
+				'pid-file'  => '/var/run/mysqld/mysqld.pid',
+			},
+			mysqld_safe => {
+				'log-error' => '/var/log/mysql/mariadb.log',
+			},
+		},
 	}
 }
