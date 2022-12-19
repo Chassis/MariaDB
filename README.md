@@ -1,3 +1,5 @@
+# Note: This is no longer required as it's been built into Chassis Core: https://docs.chassis.io/en/latest/config/#mariadb-configuration
+
 # A MariaDB extension for Chassis
 The MariaDB extension automatically sets up your Chassis instance to to use MariaDB.
 
